@@ -1,0 +1,2 @@
+commonmark==0.8.1
+pyyaml==3.13
