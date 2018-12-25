@@ -6,7 +6,7 @@ from lib.parse import parse_markdown_with_frontmatter
 def read_directory(path, base_path=None):
     base_path = base_path or os.path.abspath(path)
 
-    entries = []
+    entries = {}
 
     directory = {
         'type': 'directory',
@@ -18,9 +18,9 @@ def read_directory(path, base_path=None):
     with os.scandir(path) as scanned_entries:
         for entry in scanned_entries:
             if entry.is_file():
-                entries.append(read_file(entry.path, base_path))
+                entries[entry.name] = read_file(entry.path, base_path)
             else:
-                entries.append(read_directory(entry.path, base_path))
+                entries[entry.name] = read_directory(entry.path, base_path)
 
     return directory
 

@@ -9,38 +9,34 @@ from tests import TEST_BASE_PATH
 def test_read_directory():
     data = read_directory(os.path.join(TEST_BASE_PATH, 'source'))
 
-    assert data['type'] == 'directory'
-    assert data['name'] == 'source'
-    assert data['path'] == '.'
-
-    assert len(data['entries']) == 2
-
-    foo_data = next(entry for entry in data['entries']
-                    if entry['name'] == 'foo')
-    assert foo_data == {
+    assert data == {
         'type': 'directory',
-        'name': 'foo',
-        'path': 'foo',
-        'entries': [
-            {
+        'name': 'source',
+        'path': '.',
+        'entries': {
+            'foo': {
+                'type': 'directory',
+                'name': 'foo',
+                'path': 'foo',
+                'entries': {
+                    'bar.md': {
+                        'type': 'file',
+                        'name': 'bar.md',
+                        'path': 'foo/bar.md',
+                        'data': {
+                            'title': 'Bar',
+                            'date': date(2018, 12, 24)
+                        },
+                        'content': '<p>This is the content of bar.md.</p>\n'
+                    }
+                }
+            },
+            'baz.md': {
                 'type': 'file',
-                'name': 'bar.md',
-                'path': 'foo/bar.md',
-                'data': {
-                    'title': 'Bar',
-                    'date': date(2018, 12, 24)
-                },
-                'content': '<p>This is the content of bar.md.</p>\n'
+                'name': 'baz.md',
+                'path': 'baz.md',
+                'data': {},
+                'content': '<p>This is the content of baz.md.</p>\n'
             }
-        ]
-    }
-
-    baz_data = next(entry for entry in data['entries']
-                    if entry['name'] == 'baz.md')
-    assert baz_data == {
-        'type': 'file',
-        'name': 'baz.md',
-        'path': 'baz.md',
-        'data': {},
-        'content': '<p>This is the content of baz.md.</p>\n'
+        }
     }
