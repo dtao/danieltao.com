@@ -34,7 +34,7 @@ def read_file(path, base_path):
     if path.endswith('.md'):
         parsed_file = parse_markdown_with_frontmatter(content)
         data = parsed_file['frontmatter'] or {}
-        content = parsed_file['content']
+        content = parsed_file['html']
 
     return {
         'type': 'file',

@@ -30,7 +30,7 @@ def test_read_directory():
                     'title': 'Bar',
                     'date': date(2018, 12, 24)
                 },
-                'content': 'This is the content of bar.md.'
+                'content': '<p>This is the content of bar.md.</p>\n'
             }
         ]
     }
@@ -42,5 +42,5 @@ def test_read_directory():
         'name': 'baz.md',
         'path': 'baz.md',
         'data': {},
-        'content': 'This is the content of baz.md.'
+        'content': '<p>This is the content of baz.md.</p>\n'
     }
