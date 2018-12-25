@@ -4,14 +4,13 @@ from lib.parse import parse_markdown_with_frontmatter
 
 
 def read_directory(path, base_path=None):
-    base_path = base_path or os.path.dirname(path)
-    base_name = os.path.basename(path)
+    base_path = base_path or os.path.abspath(path)
 
     entries = []
 
     directory = {
         'type': 'directory',
-        'name': base_name,
+        'name': os.path.basename(path),
         'path': os.path.relpath(path, base_path),
         'entries': entries
     }

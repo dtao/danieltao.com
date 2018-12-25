@@ -7,11 +7,11 @@ from tests import TEST_BASE_PATH
 
 
 def test_read_directory():
-    data = read_directory(os.path.join(TEST_BASE_PATH, 'data'))
+    data = read_directory(os.path.join(TEST_BASE_PATH, 'source'))
 
     assert data['type'] == 'directory'
-    assert data['name'] == 'data'
-    assert data['path'] == 'data'
+    assert data['name'] == 'source'
+    assert data['path'] == '.'
 
     assert len(data['entries']) == 2
 
@@ -20,12 +20,12 @@ def test_read_directory():
     assert foo_data == {
         'type': 'directory',
         'name': 'foo',
-        'path': 'data/foo',
+        'path': 'foo',
         'entries': [
             {
                 'type': 'file',
                 'name': 'bar.md',
-                'path': 'data/foo/bar.md',
+                'path': 'foo/bar.md',
                 'data': {
                     'title': 'Bar',
                     'date': date(2018, 12, 24)
@@ -40,7 +40,7 @@ def test_read_directory():
     assert baz_data == {
         'type': 'file',
         'name': 'baz.md',
-        'path': 'data/baz.md',
+        'path': 'baz.md',
         'data': {},
         'content': 'This is the content of baz.md.'
     }
