@@ -1,2 +1,3 @@
 commonmark==0.8.1
+pystache==0.5.4
 pyyaml==3.13
