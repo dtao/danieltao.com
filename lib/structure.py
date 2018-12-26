@@ -7,13 +7,19 @@ from lib.parse import parse_markdown_with_frontmatter
 
 
 class Entry(object):
-    def __init__(self, path, base_path=None, parent=None):
+    def __init__(self, path, parent=None):
         self.abs_path = path
-        self.base_path = base_path or os.path.abspath(path)
         self.parent = parent
         self.root = parent.root if parent else self
         self.name = os.path.basename(path)
-        self.path = os.path.relpath(path, self.base_path)
+
+    @property
+    def base_path(self):
+        return self.root.abs_path
+
+    @property
+    def path(self):
+        return os.path.relpath(self.abs_path, self.base_path)
 
 
 class Directory(Entry):
@@ -34,11 +40,11 @@ class Directory(Entry):
         with os.scandir(self.abs_path) as scanned_entries:
             for entry in scanned_entries:
                 if entry.is_file():
-                    file = File(entry.path, self.base_path, self)
+                    file = File(entry.path, self)
                     self._entries[file.path] = file
                     yield file
                 else:
-                    directory = Directory(entry.path, self.base_path, self)
+                    directory = Directory(entry.path, self)
                     self._entries[directory.path] = directory
                     yield directory
             self._populated = True
