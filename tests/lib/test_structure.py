@@ -2,12 +2,12 @@ import os
 
 from datetime import date
 
-from lib.structure import read_directory
+from lib.structure import Directory
 from tests import TEST_BASE_PATH
 
 
-def test_read_directory():
-    data = read_directory(os.path.join(TEST_BASE_PATH, 'source'))
+def test_directory():
+    data = Directory(os.path.join(TEST_BASE_PATH, 'source')).as_dict()
 
     assert data == {
         'type': 'directory',
