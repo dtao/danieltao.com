@@ -37,6 +37,13 @@ def test_directory():
                 'path': 'baz.md',
                 'data': {},
                 'content': '<p>This is the content of baz.md.</p>\n'
+            },
+            '__template__.html': {
+                'type': 'file',
+                'name': '__template__.html',
+                'path': '__template__.html',
+                'data': {},
+                'content': '{{ page.content }}\n'
             }
         }
     }
