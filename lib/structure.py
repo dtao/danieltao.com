@@ -1,3 +1,4 @@
+import mimetypes
 import os
 import re
 
@@ -57,7 +58,7 @@ class Directory(Entry):
                 with open(template_path, 'r') as f:
                     self._template = Template(f.read())
             else:
-                self._template = self.parent.template
+                self._template = getattr(self.parent, 'template', None)
         return self._template
 
     @property
@@ -120,20 +121,42 @@ class File(Entry):
         self._populate()
         return self._content
 
+    @property
+    def template(self):
+        if not hasattr(self, '_template'):
+            if self.parent.template:
+                self._template = self.parent.template
+            else:
+                self._populate()
+                self._template = Template(self._content.decode('utf-8'))
+        return self._template
+
+    def is_text(self):
+        if self.name.endswith('.md') or self.name.endswith('.markdown'):
+            return True
+
+        guessed_type, encoding = mimetypes.guess_type(self.name)
+        if guessed_type is None:
+            return False
+
+        guessed_type, guessed_subtype = guessed_type.split('/')
+        return guessed_type == 'text'
+
     def build(self, dest_path):
         if self.name == '__template__.html':
             return
 
         output_path = os.path.join(dest_path, self.path)
 
-        if self.name.endswith('.md'):
-            output_path = re.sub(r'\.md$', '.html', output_path)
-            template = self.parent.template
+        if self.is_text():
+            output_path = re.sub(r'\.(?:md|markdown)$', '.html', output_path)
+            output = self.template.render(site=self.root,
+                                          page=self).encode('utf-8')
         else:
-            template = Template(self.content)
+            output = self.content
 
-        with open(output_path, 'w') as f:
-            f.write(template.render(site=self.root, page=self))
+        with open(output_path, 'wb') as f:
+            f.write(output)
 
     def as_dict(self):
         return {
@@ -145,11 +168,12 @@ class File(Entry):
         if self._populated:
             return
 
-        with open(self.abs_path, 'r') as f:
+        with open(self.abs_path, 'rb') as f:
             content = f.read()
 
         if self.abs_path.endswith('.md'):
-            parsed_file = parse_markdown_with_frontmatter(content)
+            parsed_file = parse_markdown_with_frontmatter(
+                content.decode('utf-8'))
             self._data = parsed_file['frontmatter'] or {}
             self._content = parsed_file['html']
         else:
