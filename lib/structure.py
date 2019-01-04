@@ -63,12 +63,16 @@ class Directory(Entry):
 
     @property
     def directories(self):
-        return (entry for entry in self.entries if entry.type == 'directory')
+        entries = list(entry for entry in self.entries
+                       if entry.type == 'directory')
+        return sorted(entries, key=lambda entry: entry.name)
 
     @property
     def files(self):
-        return (entry for entry in self.entries
-                if entry.type == 'file' and entry.name != '__template__.html')
+        entries = list(entry for entry in self.entries
+                       if (entry.type == 'file' and
+                           entry.name != '__template__.html'))
+        return sorted(entries, key=lambda entry: entry.name)
 
     def entry(self, path):
         self._populate()
