@@ -14,3 +14,7 @@ main {
     left: 320px;
     right: 0;
 }
+
+main article {
+    max-width: 960px;
+}
