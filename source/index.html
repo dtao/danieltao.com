@@ -2,14 +2,14 @@
 
 <head>
     <title>Daniel Tao</title>
+    <link rel="stylesheet" href="/index.css" />
 </head>
 
 <body>
-    <header>
-        <h1>Dan Tao</h1>
-    </header>
-
-    <main>
+    <nav>
+        <header>
+            <h1>Dan Tao</h1>
+        </header>
         <img src="https://en.gravatar.com/userimage/1435841/0ad812da9390c730de37c6c6cfeec19c.jpg?size=256" />
         <p>I'm trying something new.</p>
         <ul>
@@ -18,6 +18,12 @@
             <li><a href="https://github.com/dtao">Code</a></li>
             <li><a href="https://soundcloud.com/dantao">Music</a></li>
         </ul>
+    </nav>
+
+    <main>
+        {%- for chapter in site.entry('chapters').files %}
+        <article>{{ chapter.content }}</article>
+        {%- endfor %}
     </main>
 </body>
 
